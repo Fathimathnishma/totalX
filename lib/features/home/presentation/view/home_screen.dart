@@ -2,7 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:totalxtestapp/features/home/presentation/provider/task_add.dart';
+import 'package:totalxtestapp/features/home/presentation/provider/provider.dart';
 
 import 'package:totalxtestapp/features/home/presentation/view/widgets/custom_dialog.dart';
 import 'package:totalxtestapp/general/utils/app_colors.dart';
@@ -17,35 +17,37 @@ class HomeScreen extends StatefulWidget {
 }
 
 
-TextEditingController nameController = TextEditingController();
-TextEditingController ageController = TextEditingController();
+
 
 
 class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _scrollController =ScrollController();
- //final SearchController _searchController =SearchController();
+// final SearchController _searchController =SearchController();
  
 
 
   @override
   void initState() {
      WidgetsBinding.instance.addPostFrameCallback((_) {
-      final addProvider = Provider.of<TaskAdd>(context, listen: false);
+      final addProvider = Provider.of<MainProvider>(context, listen: false);
+      //addProvider.getData();
+      addProvider.clearData();
       addProvider.searchController.addListener(() {
-        addProvider.clearData();
-        addProvider.initData(scrollController:_scrollController);
+      addProvider.clearData();
+       addProvider.initData(scrollController: _scrollController);
       });
-      addProvider.initData(scrollController: _scrollController, );
+     addProvider.initData(scrollController: _scrollController, );
       
      });
     super.initState();
    void dispose(){
       _scrollController.dispose();
+      
     }
   }
   @override
   Widget build(BuildContext context) {
-    return Consumer<TaskAdd>(
+    return Consumer<MainProvider>(
       builder: (context, stateTaskAdd, child) => Scaffold(
         backgroundColor: Colorconst.primaryColor.withOpacity(0.7),
         appBar: AppBar(
@@ -157,7 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ? const Center(
                 child: CircularProgressIndicator(),
               )
-            : (stateTaskAdd.isLoading == false && stateTaskAdd.allUsers.isEmpty)
+            : (stateTaskAdd.isLoading && stateTaskAdd.allUsers.isEmpty)
                 ? const Center(child: Text("no data",style: TextStyle(color: Colorconst.whiteColor),))
                 : ListView.separated(
                   controller: _scrollController, 

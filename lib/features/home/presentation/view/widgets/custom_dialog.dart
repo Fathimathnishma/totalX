@@ -1,8 +1,7 @@
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:totalxtestapp/features/home/presentation/provider/task_add.dart';
-import 'package:totalxtestapp/features/home/presentation/view/home_screen.dart';
-import 'package:totalxtestapp/general/services/setsearch.dart';
+import 'package:totalxtestapp/features/home/presentation/provider/provider.dart';
 import 'package:totalxtestapp/general/utils/app_colors.dart';
 import 'package:totalxtestapp/main.dart';
 
@@ -22,7 +21,7 @@ class _CustomDialogWidState extends State<CustomDialogWid> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Dialog(
-            child: Consumer<TaskAdd>(
+            child: Consumer<MainProvider>(
               builder: (context, stateUserAdd, child) => Center(
                 child: Container(
                   height: height * 0.3,
@@ -35,14 +34,14 @@ class _CustomDialogWidState extends State<CustomDialogWid> {
                       children: [
                         const Text("New Task"),
                         TextFormField(
-                          controller: nameController,
+                          controller: stateUserAdd.nameController,
                           decoration: const InputDecoration(
                             hintText: "enter your name",
                           ),
                         ),
                         TextFormField(
                           // validator: ,
-                          controller: ageController,
+                          controller: stateUserAdd.ageController,
                           decoration: const InputDecoration(
                             hintText: "enter your age",
                           ),
@@ -50,16 +49,24 @@ class _CustomDialogWidState extends State<CustomDialogWid> {
                         ),
                         InkWell(
                           onTap: () async {
-                            if (nameController.text.isNotEmpty &&
-                                ageController.text.isNotEmpty) {
+                            if (stateUserAdd.nameController.text.isNotEmpty &&
+                                stateUserAdd.ageController.text.isNotEmpty) {
                               try {
-                                int age = int.parse(ageController.text);
-                                stateUserAdd.setUser(
-                                    age: age, name: nameController.text, search: generateKeywords (nameController.text+ " "+ageController.text+""));
-                                 stateUserAdd.addShowDialog(context);
-                                await stateUserAdd.addUser(context);
-                                nameController.clear();
-                                ageController.clear();
+                               // int age = int.parse(stateUserAdd.ageController.text);
+                                stateUserAdd.addUser( errors: (p0) {
+                                    
+                                },
+                                 onSuccess:() {
+                                  stateUserAdd.addShowDialog(context);
+                                   Navigator.pop(context);
+                                },
+                                );
+                                // stateUserAdd.setUser(
+                                //     age: age, name: stateUserAdd.nameController.text, search: generateKeywords ("${stateUserAdd.nameController.text} ${stateUserAdd.ageController.text}"));
+                              
+                                //await stateUserAdd.addUser(context);
+                               stateUserAdd. nameController.clear();
+                                stateUserAdd.ageController.clear();
                                 Navigator.pop(context);
                               
                               } catch (e) {

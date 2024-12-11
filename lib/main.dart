@@ -1,18 +1,18 @@
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:totalxtestapp/features/home/presentation/provider/task_add.dart';
+import 'package:totalxtestapp/features/home/data/i_mainfacade.dart';
+import 'package:totalxtestapp/features/home/presentation/provider/provider.dart';
 import 'package:totalxtestapp/features/home/presentation/view/home_screen.dart';
-import 'package:totalxtestapp/firebase_options.dart';
+
+import 'package:totalxtestapp/general/di/injection.dart';
 
 var height;
 var width;
 
 Future<void> main() async {
 WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-);
+ await configureDependancy();
 
   runApp(const MyApp());
   
@@ -29,8 +29,8 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => TaskAdd(),
-        ),
+          create: (_) => MainProvider(sl<IMainfacade>()
+        )),
       ],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,
